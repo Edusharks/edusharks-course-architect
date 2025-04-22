@@ -31,9 +31,8 @@ const Dashboard = () => {
     },
   });
 
-  const completedCourses = courses?.filter(course => 
-    course.projects?.every(project => project.completed)
-  )?.length ?? 0;
+  // Change this section to check for project_completed in user_progress instead of 'completed' on projects
+  const completedCourses = 0; // We'll properly implement this later with user_progress data
 
   if (isLoading || adminLoading) {
     return (
