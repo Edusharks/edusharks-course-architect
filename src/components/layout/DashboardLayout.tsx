@@ -6,7 +6,11 @@ import { UserRound } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { ProfileTabs } from '@/components/dashboard/ProfileTabs';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const DashboardLayout = () => {
   const { user, loading } = useAuth();
@@ -64,8 +68,8 @@ const DashboardLayout = () => {
               </Link>
             </div>
             <div className="flex items-center">
-              <Popover>
-                <PopoverTrigger asChild>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="flex items-center hover:bg-gray-100 dark:hover:bg-gray-800">
                     {avatarUrl ? (
                       <img 
@@ -78,11 +82,11 @@ const DashboardLayout = () => {
                     )}
                     <span className="ml-2">{user.email}</span>
                   </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 p-0" align="end">
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="mt-2" align="end">
                   <ProfileTabs />
-                </PopoverContent>
-              </Popover>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
