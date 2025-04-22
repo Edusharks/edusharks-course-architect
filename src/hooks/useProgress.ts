@@ -3,6 +3,24 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
+// Define a proper type for the section object
+interface Section {
+  id: string;
+  completed: boolean;
+  title?: string;
+}
+
+interface UserProgress {
+  id: string;
+  user_id: string;
+  project_id: string;
+  course_id: string;
+  completed_sections: Section[] | null;
+  project_completed: boolean | null;
+  last_accessed_at: string | null;
+  updated_at: string | null;
+}
+
 export const useProgress = (projectId: string, courseId: string) => {
   const queryClient = useQueryClient();
 
@@ -16,12 +34,12 @@ export const useProgress = (projectId: string, courseId: string) => {
         .single();
 
       if (error) throw error;
-      return data;
+      return data as UserProgress;
     },
   });
 
   const updateProgress = useMutation({
-    mutationFn: async (completedSections: any[]) => {
+    mutationFn: async (completedSections: Section[]) => {
       const { error } = await supabase
         .from('user_progress')
         .upsert({

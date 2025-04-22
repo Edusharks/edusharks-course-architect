@@ -1,6 +1,14 @@
 
 import { Progress } from '@/components/ui/progress';
 import { useProgress } from '@/hooks/useProgress';
+import { Database } from '@/integrations/supabase/types';
+
+// Define a proper type for the section object
+interface Section {
+  id: string;
+  completed: boolean;
+  title?: string;
+}
 
 interface ProgressTrackerProps {
   projectId: string;
@@ -13,9 +21,12 @@ export const ProgressTracker = ({ projectId, courseId, totalSections }: Progress
   
   if (isLoading) return null;
 
-  const completedSections = progress?.completed_sections?.filter(
-    (section: any) => section.completed
-  ).length ?? 0;
+  // Safely check if completed_sections exists and is an array
+  const completedSectionsArray = Array.isArray(progress?.completed_sections) 
+    ? progress.completed_sections as Section[]
+    : [];
+  
+  const completedSections = completedSectionsArray.filter(section => section.completed).length;
 
   const progressPercentage = (completedSections / totalSections) * 100;
 
