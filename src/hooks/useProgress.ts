@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { Database } from '@/integrations/supabase/types';
 
 // Define a proper type for the section object
 interface Section {
@@ -34,7 +35,11 @@ export const useProgress = (projectId: string, courseId: string) => {
         .single();
 
       if (error) throw error;
-      return data as UserProgress;
+      // Safely cast the data from Json to our UserProgress type
+      return {
+        ...data,
+        completed_sections: data?.completed_sections as unknown as Section[] | null
+      } as UserProgress;
     },
   });
 
@@ -46,7 +51,7 @@ export const useProgress = (projectId: string, courseId: string) => {
           project_id: projectId,
           course_id: courseId,
           user_id: (await supabase.auth.getUser()).data.user?.id,
-          completed_sections: completedSections,
+          completed_sections: completedSections as unknown as Database['public']['Tables']['user_progress']['Insert']['completed_sections'],
         });
 
       if (error) throw error;

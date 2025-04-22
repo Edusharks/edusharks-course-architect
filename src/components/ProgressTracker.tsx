@@ -23,7 +23,7 @@ export const ProgressTracker = ({ projectId, courseId, totalSections }: Progress
 
   // Safely check if completed_sections exists and is an array
   const completedSectionsArray = Array.isArray(progress?.completed_sections) 
-    ? progress.completed_sections as Section[]
+    ? progress.completed_sections 
     : [];
   
   const completedSections = completedSectionsArray.filter(section => section.completed).length;
