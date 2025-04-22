@@ -1,7 +1,7 @@
 
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import CreateCourse from "./pages/CreateCourse";
@@ -21,6 +21,7 @@ const App = () => (
         <Route path="/auth" element={<Auth />} />
         <Route path="/" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Navigate to="/" replace />} />
           <Route path="create-course" element={<CreateCourse />} />
           <Route path="profile" element={<Profile />} />
           <Route path="admin/settings" element={<AdminSettings />} />

@@ -58,7 +58,7 @@ export function useAuth() {
         password,
       });
       if (error) throw error;
-      navigate('/dashboard');
+      navigate('/');
     } catch (error: any) {
       toast({
         title: "Error",
