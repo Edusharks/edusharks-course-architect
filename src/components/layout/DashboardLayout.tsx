@@ -24,7 +24,7 @@ const DashboardLayout = () => {
         .from('profiles')
         .select('avatar_url')
         .eq('id', user.id)
-        .single();
+        .maybeSingle(); // Using maybeSingle instead of single to prevent errors
         
       if (error) throw error;
       

@@ -6,38 +6,50 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/hooks/useAuth";
 
 const EditCourse = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const { isAdmin, loading: adminLoading } = useAdmin();
+  const { loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  
+  const isLoading = adminLoading || authLoading;
 
-  const { data: course, isLoading } = useQuery({
+  const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ["course", courseId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("courses")
         .select("*")
         .eq("id", courseId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
     },
+    enabled: !isLoading && isAdmin,
   });
 
   useEffect(() => {
-    if (!adminLoading && !isAdmin) {
+    if (!isLoading && !isAdmin) {
       navigate("/");
     }
-  }, [isAdmin, adminLoading, navigate]);
+  }, [isAdmin, isLoading, navigate]);
 
-  if (isLoading || adminLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || courseLoading) {
+    return <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="text-xl">Loading...</div>
+    </div>;
   }
 
   if (!course) {
-    return <div>Course not found</div>;
+    return <div className="text-center mt-8">
+      <h2 className="text-2xl font-bold">Course not found</h2>
+      <Button onClick={() => navigate("/")} variant="outline" className="mt-4">
+        Back to Dashboard
+      </Button>
+    </div>;
   }
 
   return (

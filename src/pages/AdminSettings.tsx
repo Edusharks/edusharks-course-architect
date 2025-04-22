@@ -4,19 +4,25 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/hooks/useAuth";
 
 const AdminSettings = () => {
-  const { isAdmin, loading } = useAdmin();
+  const { isAdmin, loading: adminLoading } = useAdmin();
+  const { loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  
+  const isLoading = adminLoading || authLoading;
 
   useEffect(() => {
-    if (!loading && !isAdmin) {
+    if (!isLoading && !isAdmin) {
       navigate("/");
     }
-  }, [isAdmin, loading, navigate]);
+  }, [isAdmin, isLoading, navigate]);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="text-xl">Loading...</div>
+    </div>;
   }
 
   return (
