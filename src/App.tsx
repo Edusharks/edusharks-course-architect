@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import CreateCourse from "./pages/CreateCourse";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";  // Add this import
 
 const queryClient = new QueryClient();
 
