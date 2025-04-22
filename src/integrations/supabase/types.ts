@@ -9,13 +9,208 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      courses: {
+        Row: {
+          content: Json | null
+          created_at: string | null
+          description: string | null
+          header_image: string | null
+          id: string
+          image_url: string | null
+          is_published: boolean | null
+          name: string
+          owner_id: string | null
+          styles: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: Json | null
+          created_at?: string | null
+          description?: string | null
+          header_image?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          name: string
+          owner_id?: string | null
+          styles?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: Json | null
+          created_at?: string | null
+          description?: string | null
+          header_image?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          name?: string
+          owner_id?: string | null
+          styles?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      enrollments: {
+        Row: {
+          course_id: string
+          enrolled_at: string | null
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          course_id: string
+          enrolled_at?: string | null
+          id?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          course_id?: string
+          enrolled_at?: string | null
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrollments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          content: Json | null
+          course_id: string
+          created_at: string | null
+          description: string | null
+          difficulty: string | null
+          id: string
+          image_url: string | null
+          name: string
+          order: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: Json | null
+          course_id: string
+          created_at?: string | null
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          order?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: Json | null
+          course_id?: string
+          created_at?: string | null
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          order?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_progress: {
+        Row: {
+          completed_sections: Json | null
+          course_id: string
+          id: string
+          last_accessed_at: string | null
+          project_completed: boolean | null
+          project_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_sections?: Json | null
+          course_id: string
+          id?: string
+          last_accessed_at?: string | null
+          project_completed?: boolean | null
+          project_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_sections?: Json | null
+          course_id?: string
+          id?: string
+          last_accessed_at?: string | null
+          project_completed?: boolean | null
+          project_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_progress_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_my_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
