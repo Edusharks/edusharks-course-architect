@@ -14,6 +14,9 @@ const CreateCourse = () => {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [courseLink, setCourseLink] = useState('');
+  const [startLink, setStartLink] = useState('');
+  const [duration, setDuration] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +31,10 @@ const CreateCourse = () => {
             name,
             description,
             owner_id: user.id,
-            is_published: false
+            is_published: false,
+            course_link: courseLink,
+            start_link: startLink,
+            duration: duration ? parseInt(duration) : null
           }
         ]);
 
@@ -77,6 +83,43 @@ const CreateCourse = () => {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter course description"
             rows={4}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="courseLink" className="block text-sm font-medium">
+            Course Link
+          </label>
+          <Input
+            id="courseLink"
+            value={courseLink}
+            onChange={(e) => setCourseLink(e.target.value)}
+            placeholder="Enter course link (optional)"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="startLink" className="block text-sm font-medium">
+            Start Link
+          </label>
+          <Input
+            id="startLink"
+            value={startLink}
+            onChange={(e) => setStartLink(e.target.value)}
+            placeholder="Enter start link (optional)"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="duration" className="block text-sm font-medium">
+            Duration (in hours)
+          </label>
+          <Input
+            id="duration"
+            type="number"
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+            placeholder="Enter course duration (optional)"
           />
         </div>
 
