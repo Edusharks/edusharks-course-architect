@@ -4,13 +4,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import Logo from '@/components/Logo';
 import { toast } from '@/components/ui/use-toast';
 
 const Auth = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -18,7 +19,7 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { user, signIn, signUp, resetPassword, updatePassword } = useAuth();
+  const { user, loading, signIn, signUp, resetPassword, updatePassword } = useAuth();
 
   useEffect(() => {
     // Check if this is a password reset page
@@ -28,8 +29,13 @@ const Auth = () => {
     }
   }, [location]);
 
+  // Wait until we're sure about authentication state before redirecting
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,6 +79,7 @@ const Auth = () => {
       await signUp(email, password);
     } else {
       await signIn(email, password);
+      navigate('/');
     }
   };
 

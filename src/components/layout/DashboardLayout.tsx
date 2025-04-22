@@ -1,14 +1,15 @@
 
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate, Outlet, Link } from 'react-router-dom';
+import { Navigate, Outlet, Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { UserRound } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 const DashboardLayout = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -24,7 +25,7 @@ const DashboardLayout = () => {
         .from('profiles')
         .select('avatar_url')
         .eq('id', user.id)
-        .maybeSingle(); // Using maybeSingle instead of single to prevent errors
+        .maybeSingle();
         
       if (error) throw error;
       
@@ -36,6 +37,17 @@ const DashboardLayout = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/auth');
+  };
+
+  // Show loading state while checking authentication
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  // Redirect to auth page if not authenticated
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
@@ -69,7 +81,7 @@ const DashboardLayout = () => {
               </Link>
               <Button
                 variant="ghost"
-                onClick={() => signOut()}
+                onClick={handleSignOut}
               >
                 Sign Out
               </Button>

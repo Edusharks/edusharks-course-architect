@@ -31,6 +31,8 @@ export const useAdmin = () => {
       }
     };
 
+    // Reset loading state when user changes
+    setLoading(true);
     checkAdminStatus();
   }, [user]);
 

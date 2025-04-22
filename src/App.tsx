@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import AdminSettings from "./pages/AdminSettings";
 import EditCourse from "./pages/EditCourse";
+import { AuthProvider } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
@@ -17,18 +18,20 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <Toaster />
     <BrowserRouter>
-      <Routes>
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="dashboard" element={<Navigate to="/" replace />} />
-          <Route path="create-course" element={<CreateCourse />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="admin/settings" element={<AdminSettings />} />
-          <Route path="courses/:courseId/edit" element={<EditCourse />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="dashboard" element={<Navigate to="/" replace />} />
+            <Route path="create-course" element={<CreateCourse />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="admin/settings" element={<AdminSettings />} />
+            <Route path="courses/:courseId/edit" element={<EditCourse />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </QueryClientProvider>
 );
