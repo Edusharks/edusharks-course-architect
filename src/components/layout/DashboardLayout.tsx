@@ -1,15 +1,15 @@
-
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate, Outlet, Link, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { UserRound } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { ProfileTabs } from '@/components/dashboard/ProfileTabs';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 const DashboardLayout = () => {
-  const { user, signOut, loading } = useAuth();
+  const { user, loading } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -37,59 +37,55 @@ const DashboardLayout = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/auth');
-  };
-
-  // Show loading state while checking authentication
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
-  // Redirect to auth page if not authenticated
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <nav className="bg-white dark:bg-gray-900 shadow-sm animate-fade-in">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <Link to="/" className="text-xl font-bold">
-                  EduSharks LMS
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link to="/profile" className="flex items-center">
-                <Button variant="ghost" size="sm" className="flex items-center">
-                  {avatarUrl ? (
-                    <img 
-                      src={avatarUrl} 
-                      alt="Profile" 
-                      className="h-6 w-6 rounded-full object-cover mr-2" 
-                    />
-                  ) : (
-                    <UserRound className="mr-2 h-4 w-4" />
-                  )}
-                  Profile
-                </Button>
-              </Link>
-              <Button
-                variant="ghost"
-                onClick={handleSignOut}
+              <Link 
+                to="/" 
+                className="flex-shrink-0 flex items-center text-xl font-bold 
+                          bg-gradient-to-r from-primary to-purple-600 
+                          bg-clip-text text-transparent hover:opacity-80 
+                          transition-opacity duration-200"
               >
-                Sign Out
-              </Button>
+                EduSharks LMS
+              </Link>
+            </div>
+            <div className="flex items-center">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center hover:bg-gray-100 dark:hover:bg-gray-800">
+                    {avatarUrl ? (
+                      <img 
+                        src={avatarUrl} 
+                        alt="Profile" 
+                        className="h-8 w-8 rounded-full object-cover mr-2 ring-2 ring-primary/20" 
+                      />
+                    ) : (
+                      <UserRound className="mr-2 h-6 w-6" />
+                    )}
+                    <span className="ml-2">{user.email}</span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 p-0" align="end">
+                  <ProfileTabs />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>
       </nav>
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 animate-fade-in">
         <Outlet />
       </main>
     </div>
