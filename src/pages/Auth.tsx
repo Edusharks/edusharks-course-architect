@@ -3,13 +3,16 @@ import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Navigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { user, signIn, signUp } = useAuth();
 
   if (user) {
@@ -27,63 +30,89 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>{isSignUp ? 'Create Account' : 'Sign In'}</CardTitle>
-          <CardDescription>
-            {isSignUp 
-              ? 'Create a new account to get started' 
-              : 'Sign in to your account to continue'}
-          </CardDescription>
+      <Card className="w-full max-w-md bg-white shadow-xl border-0">
+        <CardHeader className="flex flex-col items-center space-y-2 pb-0">
+          <Logo />
+          <div className="w-full flex justify-center space-x-8 mt-8 border-b">
+            <button
+              className={`pb-4 px-8 ${!isSignUp ? 'text-blue-500 border-b-2 border-blue-500 font-medium' : 'text-gray-500'}`}
+              onClick={() => setIsSignUp(false)}
+            >
+              Login
+            </button>
+            <button
+              className={`pb-4 px-8 ${isSignUp ? 'text-blue-500 border-b-2 border-blue-500 font-medium' : 'text-gray-500'}`}
+              onClick={() => setIsSignUp(true)}
+            >
+              Sign Up
+            </button>
+          </div>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 pt-6">
+            <h2 className="text-2xl font-semibold text-center text-gray-900">
+              LMS {isSignUp ? 'Sign Up' : 'Login'}
+            </h2>
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="text-sm font-medium text-gray-700">
                 Email
               </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10"
+                  required
+                />
+              </div>
             </div>
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="text-sm font-medium text-gray-700">
                 Password
               </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
             </div>
+            <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">
+              {isSignUp ? 'Sign Up' : 'Login'}
+            </Button>
+            {!isSignUp && (
+              <div className="text-center">
+                <a href="#" className="text-sm text-blue-500 hover:text-blue-600">
+                  Forgot Password?
+                </a>
+              </div>
+            )}
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full">
-              {isSignUp ? 'Sign Up' : 'Sign In'}
-            </Button>
-            <Button
-              type="button"
-              variant="link"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="w-full"
-            >
-              {isSignUp
-                ? 'Already have an account? Sign in'
-                : "Don't have an account? Sign up"}
-            </Button>
-          </CardFooter>
         </form>
       </Card>
     </div>
   );
-}
+};
 
 export default Auth;
