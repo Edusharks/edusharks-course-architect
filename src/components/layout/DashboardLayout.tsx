@@ -1,3 +1,4 @@
+
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate, Outlet, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -50,15 +51,16 @@ const DashboardLayout = () => {
       <nav className="bg-white dark:bg-gray-900 shadow-sm animate-fade-in">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex">
+            <div className="flex items-center">
               <Link 
                 to="/" 
-                className="flex-shrink-0 flex items-center text-xl font-bold 
-                          bg-gradient-to-r from-primary to-purple-600 
-                          bg-clip-text text-transparent hover:opacity-80 
-                          transition-opacity duration-200"
+                className="flex-shrink-0 flex items-center"
               >
-                EduSharks LMS
+                <img 
+                  src="/lovable-uploads/29f87b55-a32d-4548-9c0a-316d44401bf2.png" 
+                  alt="Edusharks Academy" 
+                  className="h-12 w-auto object-contain" 
+                />
               </Link>
             </div>
             <div className="flex items-center">
